@@ -136,22 +136,6 @@ Desktop.ini
 !.mvn/wrapper/maven-wrapper.jar
 
 ######################
-# ESLint
-######################
-.eslintcache
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-# See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
 /dist
