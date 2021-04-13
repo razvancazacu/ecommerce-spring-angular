@@ -33,6 +33,8 @@ public class DataRestConfig implements RepositoryRestConfigurer {
         disableHttpSideEffectMethods(config, ProductCategory.class);
         disableHttpSideEffectMethods(config, Country.class);
         disableHttpSideEffectMethods(config, State.class);
+
+        exposeEntityIds(config);
     }
 
     private void disableHttpSideEffectMethods(RepositoryRestConfiguration config, Class<?> classType) {
@@ -42,8 +44,6 @@ public class DataRestConfig implements RepositoryRestConfigurer {
                 .forDomainType(classType)
                 .withItemExposure((metdata, httpMethods) -> httpMethods.disable(httpSideEffectMethods))
                 .withCollectionExposure((metdata, httpMethods) -> httpMethods.disable(httpSideEffectMethods));
-
-        exposeEntityIds(config);
     }
 
     private void exposeEntityIds(RepositoryRestConfiguration config) {
