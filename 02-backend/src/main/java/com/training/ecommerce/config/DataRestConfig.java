@@ -1,7 +1,9 @@
 package com.training.ecommerce.config;
 
+import com.training.ecommerce.model.Country;
 import com.training.ecommerce.model.Product;
 import com.training.ecommerce.model.ProductCategory;
+import com.training.ecommerce.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -18,7 +20,7 @@ import java.util.Set;
 @Configuration
 public class DataRestConfig implements RepositoryRestConfigurer {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Autowired
     public DataRestConfig(EntityManager entityManager) {
@@ -29,6 +31,8 @@ public class DataRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         disableHttpSideEffectMethods(config, Product.class);
         disableHttpSideEffectMethods(config, ProductCategory.class);
+        disableHttpSideEffectMethods(config, Country.class);
+        disableHttpSideEffectMethods(config, State.class);
     }
 
     private void disableHttpSideEffectMethods(RepositoryRestConfiguration config, Class<?> classType) {

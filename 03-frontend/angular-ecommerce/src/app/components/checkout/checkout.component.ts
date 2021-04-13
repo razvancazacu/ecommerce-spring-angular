@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupName } from '@angular/forms';
+import { Country } from 'src/app/common/country';
+import { State } from 'src/app/common/state';
 import { FormService } from 'src/app/services/form.service';
 
 @Component({
@@ -16,6 +18,11 @@ export class CheckoutComponent implements OnInit {
 
   creditCardYears: number[] = [];
   creditCardMonths: number[] = [];
+
+  countries: Country[] = [];
+  shippingAddressStates: State[] = [];
+  billingAddressStates: State[] = [];
+
 
   constructor(private formBuilder: FormBuilder,
     private formService: FormService) { }
@@ -53,22 +60,28 @@ export class CheckoutComponent implements OnInit {
     });
 
     const startMonth: number = new Date().getMonth() + 1;
-    console.log(startMonth);
 
     this.formService.getCreditCardMonths(startMonth).subscribe(
       data => {
-        console.log(JSON.stringify(data));
         this.creditCardMonths = data;
       }
     );
 
     this.formService.getCreditCardYears().subscribe(
       data => {
-        console.log(JSON.stringify(data));
         this.creditCardYears = data;
       }
     );
+
+    this.formService.getCountries().subscribe(
+      data => {
+        this.countries = data;
+      }
+    )
+
   }
+
+
   copyShippingAddressToBillingAddress(event: HTMLInputElement) {
     if (event.checked) {
       this.checkoutFormGroup.controls.billingAddress
@@ -90,7 +103,6 @@ export class CheckoutComponent implements OnInit {
     const selectedYear: number = Number(creditCardFormGroup!.value.expirationYear);
 
     let startMonth: number;
-    console.log(currentYear, selectedYear);
     if (currentYear === selectedYear) {
       startMonth = new Date().getMonth() + 1;
     } else {
@@ -99,10 +111,30 @@ export class CheckoutComponent implements OnInit {
 
     this.formService.getCreditCardMonths(startMonth).subscribe(
       data => {
-        console.log(JSON.stringify(data));
         this.creditCardMonths = data;
       }
     )
+  }
+
+  getStates(formGroupName: string) {
+    const formGroup = this.checkoutFormGroup.get(formGroupName);
+
+    const countryCode = formGroup!.value.country.code;
+    const countryName = formGroup!.value.country.name;
+
+    this.formService.getStates(countryCode).subscribe(
+      data => {
+        if (formGroupName === 'shippingAddress') {
+          this.shippingAddressStates = data;
+        } else {
+          this.billingAddressStates = data;
+        }
+
+        formGroup?.get('state')?.setValue(data[0]);
+      }
+    );
+
+    
   }
 
 }
